@@ -187,7 +187,7 @@ function P(cat,name,price,spec,o){DB.push(Object.assign({id:DB.length,cat,name,p
    ct = ระดับขั้นต่ำที่ซีพียูต้องการ, bt = ระดับเมนบอร์ดขั้นต่ำ (ภาคจ่ายไฟ VRM) */
 /* ===== ฐานข้อมูล: ราคาที่มี src = ตรวจจากหน้าสินค้าตามวันที่ระบุ / ไม่มี src = ราคาประมาณ ===== */
 P('cpu','AMD Ryzen 5 5600',4500,{s:'AM4',gen:'am4-5k',w:75,p:55,ig:0,bx:1,ct:0,bt:1});
-P('cpu','AMD Ryzen 5 5600G',5200,{s:'AM4',gen:'am4-5k',w:75,p:48,ig:1,bx:1,ct:0,bt:1});
+P('cpu','AMD Ryzen 5 5600G',4590,{s:'AM4',gen:'am4-5k',w:75,p:48,ig:1,bx:1,ct:0,bt:1},{src:S('47944/CPU--ซีพียู--AMD-RYZEN-5-5600G-3-9-GHz--SOCKET-AM4-','2026-10-08')});
 P('cpu','AMD Ryzen 5 7500F',6500,{s:'AM5',gen:'am5',w:90,p:66,ig:0,bx:1,ct:0,bt:2});
 P('cpu','AMD Ryzen 5 7600',8900,{s:'AM5',gen:'am5',w:90,p:70,ig:1,bx:1,ct:0,bt:2});
 P('cpu','AMD Ryzen 7 7700',12500,{s:'AM5',gen:'am5',w:110,p:78,ig:1,bx:1,ct:1,bt:2});
@@ -375,7 +375,23 @@ function toast(ic,tx){$('toastIc').textContent=ic;$('toastTx').textContent=tx;$(
 function announce(ic,visible,spoken){toast(ic,visible);if(!soundOn())return;chime();setTimeout(()=>speak(spoken||visible),750)}
 
 /* ===== แสดงผล ===== */
-const srcHTML=x=>x.src?'<small class="success">ตรวจที่ '+esc(x.src.shop)+(x.src.d?' เมื่อ '+esc(x.src.d):' (ไม่มีวันที่ของราคา)')+(x.src.stock?' · '+esc(x.src.stock):'')+' · <a href="'+esc(x.src.url)+'" target="_blank" rel="noopener">เปิดหน้าสินค้า</a></small>':'<small class="warning">ราคาประมาณ ยังไม่ได้ตรวจกับร้าน · ตรวจราคาที่ '+STORES.map(s=>'<a href="'+esc(s[1])+'" target="_blank" rel="noopener">'+esc(s[0])+'</a>').join(' / ')+'</small>';
+/* ลิงก์ไปหน้าสินค้าที่ร้านโดยตรง: ถ้ามีลิงก์หน้าสินค้าจริงใน EXTRA_LINKS จะเปิดตรง ถ้าไม่มีจะเปิดผลค้นหาของร้านนั้นให้อัตโนมัติ (ไม่ต้องพิมพ์ค้นเอง)
+   เพิ่มลิงก์หน้าสินค้าจริงได้ที่ EXTRA_LINKS รูปแบบ: 'ชื่อสินค้าตรงกับใน DB':[{shop:'Advice',url:'https://...'}] */
+const EXTRA_LINKS={
+  'AMD Ryzen 5 5600':[{shop:'JIB',url:J+'52538'}]
+};
+const SEARCH_STORES=[['Advice','advice.co.th'],['JIB','jib.co.th']];
+const cleanName=n=>String(n).replace(/\([^)]*\)/g,' ').replace(/\s+/g,' ').trim();
+const storeSearch=(q,site)=>'https://www.google.com/search?q='+encodeURIComponent('site:'+site+' '+q);
+const aTag=(u,t)=>'<a href="'+esc(u)+'" target="_blank" rel="noopener">'+esc(t)+'</a>';
+const shopLinks=x=>{
+  const ex=(EXTRA_LINKS[x.name]||[]),have=new Set(ex.map(l=>l.shop));
+  const direct=ex.map(l=>aTag(l.url,'เปิดหน้าสินค้าที่ '+l.shop));
+  const q=cleanName(x.name);
+  const search=SEARCH_STORES.filter(s=>!have.has(s[0])).map(s=>aTag(storeSearch(q,s[1]),s[0]));
+  return direct.concat(search.length?['ดูสินค้านี้ที่ '+search.join(' / ')]:[]).join(' · ');
+};
+const srcHTML=x=>x.src?'<small class="success">ตรวจที่ '+esc(x.src.shop)+(x.src.d?' เมื่อ '+esc(x.src.d):' (ไม่มีวันที่ของราคา)')+(x.src.stock?' · '+esc(x.src.stock):'')+' · <a href="'+esc(x.src.url)+'" target="_blank" rel="noopener">เปิดหน้าสินค้า</a></small>':'<small class="warning">ราคาประมาณ ยังไม่ได้ตรวจกับร้าน'+(x.cond==='u'?'':' · '+shopLinks(x))+'</small>';
 const partRow=(k,x)=>'<div class="part"><div class="pi" aria-hidden="true">'+ICN[k]+'</div><div><span class="pl">'+esc(CAT[k])+'</span><span class="pn">'+esc(x.name)+(x.cond==='u'?' <span class="warning">[มือสอง]</span>':'')+'</span>'+srcHTML(x)+(x.n?'<small>'+esc(x.n)+'</small>':'')+'</div><div class="price">'+baht(x.price)+'</div></div>';
 const ICON={ok:'✓',warn:'!',bad:'✕'};
 const chkHTML=l=>l.map(x=>'<div class="chk '+x.st+'"><b aria-hidden="true">'+ICON[x.st]+'</b><span><strong>'+esc(x.t)+':</strong> '+esc(x.m)+'</span></div>').join('');
