@@ -308,6 +308,14 @@ const BAL=1.6; /* การ์ดจอไม่ควรแรงเกิน ~
 function scoreOf(b,pur){const w=WT[pur];return w[0]*b.cpu.spec.p+w[1]*b.gpu.spec.p+w[2]*ramS(b.ram.spec.gb)+w[3]*ssdS(b.ssd.spec.gb)}
 function decent(b,pur){const c=b.cpu.spec.p,g=b.gpu.spec.p;return pur==='gaming'?g>=22:pur==='graphic3d'?g>=36:c>=(pur==='work'||pur==='general'?40:50)}
 const CC={};
+/* ราคาอัตโนมัติ: โหลด prices.json (GitHub Actions อัปเดตให้ทุกวัน) แล้วทับราคาในโค้ดเฉพาะรายการที่อ่านราคาจากร้านได้ ถ้าไม่มีไฟล์หรือโหลดไม่ได้ จะใช้ราคาเดิมในโค้ด */
+let PRICES_UPDATED=null;
+(function(){try{fetch('prices.json?v='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
+  if(!j||!Array.isArray(j.items))return;let n=0;
+  j.items.forEach(it=>{const x=DB.find(p=>p.name===it.name);if(!x||!(it.price>0))return;
+    x.price=Math.round(it.price);x.src={shop:it.shop||'ร้านค้า',url:it.url,d:it.d||null};n++});
+  if(n){PRICES_UPDATED=j.updated||null;for(const k in CC)delete CC[k]}
+ }).catch(()=>{})}catch(e){}})();
 function cands(cond,pur){
   const key=(LOW?'L':'')+cond+pur;if(CC[key])return CC[key];
   const out=[],cpus=pool('cpu',cond),mbs=pool('mb',cond),rams=pool('ram',cond),gpus=pool('gpu',cond),
@@ -375,10 +383,15 @@ function toast(ic,tx){$('toastIc').textContent=ic;$('toastTx').textContent=tx;$(
 function announce(ic,visible,spoken){toast(ic,visible);if(!soundOn())return;chime();setTimeout(()=>speak(spoken||visible),750)}
 
 /* ===== แสดงผล ===== */
+/* ความไม่แน่นอนของราคา: ราคาประมาณคลาดเคลื่อนได้มาก ราคาที่ตรวจแล้วยิ่งเก่ายิ่งคลาดเคลื่อน */
+const ageDays=d=>d?Math.max(0,Math.floor((Date.now()-new Date(d).getTime())/86400000)):null;
+const uncOf=x=>{if(!x.src)return .12;const a=ageDays(x.src.d);if(a===null)return .10;return a>60?.08:a>30?.05:.03};
+const priceRange=parts=>{let lo=0,hi=0;KEYS.filter(k=>parts[k]).forEach(k=>{const p=parts[k].price,u=uncOf(parts[k]);lo+=p*(1-u);hi+=p*(1+u)});return[Math.round(lo/100)*100,Math.round(hi/100)*100]};
 /* ลิงก์ไปหน้าสินค้าที่ร้านโดยตรง: ถ้ามีลิงก์หน้าสินค้าจริงใน EXTRA_LINKS จะเปิดตรง ถ้าไม่มีจะเปิดผลค้นหาของร้านนั้นให้อัตโนมัติ (ไม่ต้องพิมพ์ค้นเอง)
    เพิ่มลิงก์หน้าสินค้าจริงได้ที่ EXTRA_LINKS รูปแบบ: 'ชื่อสินค้าตรงกับใน DB':[{shop:'Advice',url:'https://...'}] */
 const EXTRA_LINKS={
-  'AMD Ryzen 5 5600':[{shop:'JIB',url:J+'52538'}]
+  'AMD Ryzen 5 5600':[{shop:'JIB',url:J+'52538'}],
+  'AMD Ryzen 5 7500F':[{shop:'JIB',url:J+'69543'}]
 };
 const SEARCH_STORES=[['Advice','advice.co.th'],['JIB','jib.co.th']];
 const cleanName=n=>String(n).replace(/\([^)]*\)/g,' ').replace(/\s+/g,' ').trim();
@@ -391,17 +404,18 @@ const shopLinks=x=>{
   const search=SEARCH_STORES.filter(s=>!have.has(s[0])).map(s=>aTag(storeSearch(q,s[1]),s[0]));
   return direct.concat(search.length?['ดูสินค้านี้ที่ '+search.join(' / ')]:[]).join(' · ');
 };
-const srcHTML=x=>x.src?'<small class="success">ตรวจที่ '+esc(x.src.shop)+(x.src.d?' เมื่อ '+esc(x.src.d):' (ไม่มีวันที่ของราคา)')+(x.src.stock?' · '+esc(x.src.stock):'')+' · <a href="'+esc(x.src.url)+'" target="_blank" rel="noopener">เปิดหน้าสินค้า</a></small>':'<small class="warning">ราคาประมาณ ยังไม่ได้ตรวจกับร้าน'+(x.cond==='u'?'':' · '+shopLinks(x))+'</small>';
+const srcHTML=x=>x.src?'<small class="'+((ageDays(x.src.d)===null||ageDays(x.src.d)>30)?'warning':'success')+'">ตรวจที่ '+esc(x.src.shop)+(x.src.d?' เมื่อ '+esc(x.src.d)+' ('+ageDays(x.src.d)+' วันก่อน'+(ageDays(x.src.d)>30?' · ราคาอาจเปลี่ยนแล้ว ตรวจใหม่ก่อนซื้อ':'')+')':' (ไม่มีวันที่ของราคา)')+(x.src.stock?' · '+esc(x.src.stock):'')+' · <a href="'+esc(x.src.url)+'" target="_blank" rel="noopener">เปิดหน้าสินค้า</a></small>':'<small class="warning">ราคาประมาณ ยังไม่ได้ตรวจกับร้าน'+(x.cond==='u'?'':' · '+shopLinks(x))+'</small>';
 const partRow=(k,x)=>'<div class="part"><div class="pi" aria-hidden="true">'+ICN[k]+'</div><div><span class="pl">'+esc(CAT[k])+'</span><span class="pn">'+esc(x.name)+(x.cond==='u'?' <span class="warning">[มือสอง]</span>':'')+'</span>'+srcHTML(x)+(x.n?'<small>'+esc(x.n)+'</small>':'')+'</div><div class="price">'+baht(x.price)+'</div></div>';
 const ICON={ok:'✓',warn:'!',bad:'✕'};
 const chkHTML=l=>l.map(x=>'<div class="chk '+x.st+'"><b aria-hidden="true">'+ICON[x.st]+'</b><span><strong>'+esc(x.t)+':</strong> '+esc(x.m)+'</span></div>').join('');
 function buildHTML(b,budget){
   const t=sumP(b),left=budget-t,ck=check(b),est=KEYS.filter(k=>b[k]&&!b[k].src).length,pct=Math.min(100,Math.round(t/budget*100));
-  return '<div class="stats"><div class="stat">ราคารวม<strong>'+baht(t)+'</strong></div><div class="stat">งบประมาณ<strong>'+baht(budget)+'</strong></div><div class="stat hl">'+(left>=0?'เงินเหลือ':'เกินงบ')+'<strong class="'+(left>=0?'success':'error')+'" style="'+(left>=0?'':'')+'">'+baht(Math.abs(left))+'</strong></div></div>'
+  const pr=priceRange(b),nAll=KEYS.filter(k=>b[k]).length,over=pr[1]-budget;
+  return '<div class="stats"><div class="stat">ราคารวม (ประมาณ)<strong>'+baht(t)+'</strong><small class="muted" style="display:block">ราคาจริงน่าจะอยู่ราว '+baht(pr[0])+' – '+baht(pr[1])+'</small></div><div class="stat">งบประมาณ<strong>'+baht(budget)+'</strong></div><div class="stat hl">'+(left>=0?'เงินเหลือ':'เกินงบ')+'<strong class="'+(left>=0?'success':'error')+'" style="'+(left>=0?'':'')+'">'+baht(Math.abs(left))+'</strong></div></div>'
    +'<div class="meter" title="ใช้งบไปแล้ว '+pct+'%"><i class="'+(left<0?'over':'')+'" style="width:'+pct+'%"></i></div>'
    +coolHTML(b)
    +KEYS.filter(k=>b[k]).map(k=>partRow(k,b[k])).join('')
-   +'<p class="muted">ใช้ราคาประมาณ '+est+' จาก '+KEYS.filter(k=>b[k]).length+' รายการ (ยังไม่ได้ตรวจกับร้าน)</p><h3>ผลตรวจความเข้ากันได้</h3>'+chkHTML(ck);
+   +'<div class="notice warning"><b>ราคาในหน้านี้เป็นราคาอ้างอิง ไม่ใช่ราคาขายจริง</b> '+est+' จาก '+nAll+' รายการเป็นราคาประมาณที่ยังไม่ได้ตรวจกับร้าน และราคาจริงเปลี่ยนได้ทุกวัน กรุณากดลิงก์ใต้แต่ละชิ้นเพื่อเช็กราคาล่าสุดที่ร้านก่อนซื้อ'+(PRICES_UPDATED?' (ราคาที่ตรวจอัตโนมัติอัปเดตล่าสุด '+PRICES_UPDATED+')':'')+(over>0?' ถ้าราคาจริงสูงกว่าที่คาด ชุดนี้อาจเกินงบได้ถึง '+baht(over):'')+'</div><h3>ผลตรวจความเข้ากันได้</h3>'+chkHTML(ck);
 }
 function altCard(title,x,budget,primary,n){
   const d=x.total-primary.total,p=x.parts,a=coolAdvice(p);
