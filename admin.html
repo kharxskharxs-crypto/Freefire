@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>ผู้ดูแล | PC Builder TH</title>
+<style>
+:root{
+  --bg:#070b16;--bg2:#0d1426;--panel:rgba(22,31,54,.78);--panel2:rgba(34,46,76,.7);--solid:#141c32;
+  --text:#eef3ff;--muted:#9aa9c7;--primary:#7c8cff;--primary2:#22d3ee;--green:#4ade80;--border:rgba(130,150,210,.2);
+  --danger:#fb7185;--warn:#fbbf24;--shadow:0 10px 40px rgba(0,0,0,.35);--grad:linear-gradient(135deg,#7c8cff,#22d3ee);
+}
+body.light{
+  --bg:#eef2fb;--bg2:#e3e9f7;--panel:rgba(255,255,255,.86);--panel2:rgba(232,238,251,.9);--solid:#fff;
+  --text:#172033;--muted:#5d6b85;--border:rgba(60,80,140,.16);--primary:#4a5bf0;--primary2:#0891b2;
+  --green:#15803d;--danger:#be123c;--warn:#a16207;--shadow:0 10px 30px rgba(40,60,120,.12);--grad:linear-gradient(135deg,#4a5bf0,#0891b2);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,"Noto Sans Thai","Sarabun",sans-serif;color:var(--text);line-height:1.65;min-height:100vh;
+  background:radial-gradient(900px 500px at 8% -5%,rgba(124,140,255,.22),transparent 60%),radial-gradient(800px 500px at 100% 5%,rgba(34,211,238,.16),transparent 60%),var(--bg);background-attachment:fixed}
+body.light{background:radial-gradient(900px 500px at 8% -5%,rgba(74,91,240,.14),transparent 60%),radial-gradient(800px 500px at 100% 5%,rgba(8,145,178,.12),transparent 60%),var(--bg)}
+header{position:sticky;top:0;z-index:20;padding:12px 0;border-bottom:1px solid var(--border);background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.container{width:min(1100px,94%);margin:auto}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:900;letter-spacing:.2px}
+.logo i{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:var(--grad);font-style:normal;font-size:20px;box-shadow:0 6px 18px rgba(124,140,255,.4)}
+.logo span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hdr-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button,input,select{font:inherit}
+button{cursor:pointer;border:1px solid var(--border);border-radius:12px;padding:10px 16px;color:var(--text);background:var(--panel2);transition:transform .15s,filter .15s,box-shadow .15s}
+button:hover{filter:brightness(1.15);transform:translateY(-1px)}
+button:active{transform:translateY(0)}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+.primary{background:var(--grad);color:#fff;border:none;font-weight:800;box-shadow:0 8px 24px rgba(124,140,255,.35)}
+.primary.big{padding:14px 22px;font-size:1.05rem;width:100%}
+.switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;font-size:.9rem;padding:8px 12px;border-radius:12px;border:1px solid var(--border);background:var(--panel2);margin:0}
+.switch input{width:auto;margin:0;accent-color:#7c8cff;transform:scale(1.15)}
+main{padding:26px 0 50px}
+.hero{text-align:center;padding:18px 0 10px}
+.hero h1{font-size:clamp(28px,5.5vw,48px);line-height:1.2;margin:12px 0;font-weight:900}
+.hero h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:640px;margin:0 auto}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.chip{display:inline-flex;gap:6px;align-items:center;padding:6px 13px;border-radius:999px;background:var(--panel2);border:1px solid var(--border);font-size:.86rem;color:var(--muted)}
+.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.panel{padding:24px;border:1px solid var(--border);border-radius:20px;background:var(--panel);margin-bottom:18px;box-shadow:var(--shadow);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.panel h2{margin:0 0 6px;font-size:1.35rem}
+.panel h3{margin:20px 0 10px;font-size:1.05rem}
+label{display:block;font-weight:700;margin-bottom:6px;font-size:.92rem}
+input,select{width:100%;background:var(--solid);color:var(--text);border:1px solid var(--border);padding:12px 13px;border-radius:12px;margin-bottom:14px}
+input:hover,select:hover{border-color:var(--primary)}
+.tabs{display:flex;gap:6px;margin:22px 0 16px;padding:5px;border-radius:16px;background:var(--panel);border:1px solid var(--border);width:fit-content;max-width:100%}
+.tabs button{border:none;background:transparent;padding:9px 20px;font-weight:700;color:var(--muted)}
+.tabs button.active{background:var(--grad);color:#fff;box-shadow:0 6px 16px rgba(124,140,255,.35)}
+.hidden{display:none!important}
+.chips-sum{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0 8px}
+.stat{background:var(--panel2);padding:14px 16px;border-radius:16px;border:1px solid var(--border);font-size:.88rem;color:var(--muted)}
+.stat strong{display:block;font-size:1.45rem;color:var(--text);line-height:1.3}
+.stat.hl strong{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.meter{height:10px;border-radius:99px;background:var(--panel2);overflow:hidden;margin:4px 0 18px;border:1px solid var(--border)}
+.meter i{display:block;height:100%;border-radius:99px;background:var(--grad);transition:width .5s}
+.meter i.over{background:linear-gradient(90deg,#fb7185,#f43f5e)}
+.part{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:13px 0;border-bottom:1px solid var(--border)}
+.part:last-of-type{border-bottom:none}
+.pi{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--border);font-size:1.3rem}
+.pl{display:block;font-size:.78rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.pn{display:block;font-weight:700}
+.part small{display:block;color:var(--muted);font-size:.8rem}
+.price{font-weight:800;white-space:nowrap}
+a{color:#8fa6ff}body.light a{color:#1d4ed8}
+.chk{display:flex;gap:10px;padding:9px 12px;border-radius:12px;background:var(--panel2);margin-bottom:6px;font-size:.92rem;border:1px solid var(--border)}
+.chk b{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:.8rem}
+.chk.ok b{background:#15803d}.chk.warn b{background:#a16207}.chk.bad b{background:#be123c}
+.notice{padding:13px 15px;border-radius:14px;background:var(--panel2);margin:12px 0;border:1px solid var(--border)}
+.success{color:var(--green)}.warning{color:var(--warn)}.error{color:var(--danger)}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.product{padding:18px;background:var(--panel);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);transition:transform .15s,border-color .15s}
+.product:hover{transform:translateY(-3px);border-color:var(--primary)}
+.product h3{margin:0 0 6px;font-size:1.02rem}
+.product p{margin:6px 0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.alts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.cool{position:relative;margin:18px 0;padding:18px 18px 16px;border-radius:18px;background:linear-gradient(135deg,rgba(124,140,255,.16),rgba(34,211,238,.14));border:1px solid var(--primary)}
+.cool.bad{background:rgba(251,113,133,.12);border-color:var(--danger)}
+.cool-h{display:flex;gap:14px;align-items:center}
+.cool-ic{font-size:2.2rem;width:62px;height:62px;border-radius:18px;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--border);flex:none}
+.cool small.k{display:block;color:var(--muted);font-weight:700;font-size:.8rem}
+.cool .need{font-size:1.3rem;font-weight:900;line-height:1.3}
+.cool p{margin:10px 0 0;font-size:.93rem}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,30px);opacity:0;pointer-events:none;z-index:50;width:min(520px,92%);padding:14px 18px;border-radius:16px;background:var(--solid);border:1px solid var(--primary);box-shadow:0 16px 50px rgba(0,0,0,.5);display:flex;gap:12px;align-items:center;transition:all .35s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast b{font-size:1.6rem}
+footer{padding:26px 0;border-top:1px solid var(--border);color:var(--muted);font-size:.9rem}
+.rec{padding:18px;background:var(--panel);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);margin-bottom:12px}
+.rec-h{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.rec details{margin-top:8px}.rec summary{cursor:pointer;font-weight:700;color:var(--primary)}
+.rec ul{margin:8px 0;padding-left:20px}
+.adm{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 14px;border-radius:14px;background:var(--panel2);border:1px solid var(--border);margin:12px 0 16px}
+.adm.on{border-color:var(--green)}
+.adm .actions{margin:0}
+.admlogin{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.admlogin input{margin:0;width:210px}
+#chgBox{width:100%}
+button.danger{background:rgba(251,113,133,.14);border-color:var(--danger);color:var(--danger)}
+.req{color:var(--danger)}
+@media(max-width:650px){.grid,.products,.alts,.stats{grid-template-columns:1fr}.panel{padding:17px}.admlogin input{width:100%}.part{grid-template-columns:auto 1fr}.part .price{grid-column:2}.tabs{width:100%}.tabs button{flex:1;padding:9px 8px}}
+
+.login{max-width:420px;margin:60px auto}
+.badge-new{display:inline-block;margin-left:8px;padding:2px 10px;border-radius:99px;background:var(--grad);color:#fff;font-size:.75rem;font-weight:800}
+.rec.fresh{border-color:var(--green);box-shadow:0 0 0 2px rgba(74,222,128,.35),var(--shadow)}
+.bar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<header><div class="container row"><div class="logo"><i aria-hidden="true">🛠️</i>ผู้ดูแล <span>PC Builder TH</span></div>
+<div class="hdr-actions hidden" id="hdrTools">
+<label class="switch" for="soundToggle"><input type="checkbox" id="soundToggle" checked>🔔 เสียง</label>
+<button id="testBtn">🔊 ทดสอบเสียง</button><button id="notifBtn">📲 แจ้งเตือนบนเบราว์เซอร์</button>
+<button id="themeButton">☀️ / 🌙</button>
+<button id="outBtn">ออกจากระบบ</button></div></div></header>
+<main class="container">
+
+<section class="panel login" id="loginBox">
+<h2>🔒 เข้าสู่ระบบผู้ดูแล</h2>
+<p class="muted">หน้านี้สำหรับเจ้าของเว็บเท่านั้น</p>
+<label for="em">อีเมล</label><input id="em" type="email" autocomplete="username">
+<label for="pw">รหัสผ่าน</label><input id="pw" type="password" autocomplete="current-password">
+<button class="primary big" id="inBtn">เข้าสู่ระบบ</button>
+<p class="muted" id="loginMsg" role="alert"></p>
+</section>
+
+<section id="dash" class="hidden">
+<div class="panel">
+<div class="bar"><div><h2 style="margin:0">📒 รายการจัดสเปก <span id="cnt" class="muted" style="font-size:.9rem"></span></h2><small class="muted" id="live">กำลังเชื่อมต่อ…</small></div>
+<div class="actions" style="margin:0"><button id="csvBtn">⬇️ ส่งออก CSV</button><button id="clrBtn" class="danger">🗑️ ลบทั้งหมด</button></div></div>
+<div class="grid" style="margin-top:14px">
+<div><label for="rQ">ค้นหา (ชื่อ / แผนก)</label><input id="rQ" type="text" autocomplete="off"></div>
+<div><label for="rLv">ระดับ / ชั้นปี</label><select id="rLv"><option value="all">ทั้งหมด</option><option value="ปวช.-1">ปวช. ปีที่ 1</option><option value="ปวช.-2">ปวช. ปีที่ 2</option><option value="ปวช.-3">ปวช. ปีที่ 3</option><option value="ปวส.-1">ปวส. ปีที่ 1</option><option value="ปวส.-2">ปวส. ปีที่ 2</option></select></div>
+</div></div>
+<div id="sideBox"></div>
+<div id="recList"></div>
+</section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"><b id="toastIc">🔔</b><span id="toastTx"></span></div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,collection,query,orderBy,limit,onSnapshot,deleteDoc,doc,getDocs,writeBatch,setDoc,serverTimestamp,where} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {firebaseConfig} from "./firebase-config.js";
+window.__PCB_ADMIN_OK=true;
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const baht=n=>Number(n||0).toLocaleString('th-TH')+' บาท';
+const PUR={gaming:'เล่นเกม',work:'ทำงานทั่วไปและเรียน',programming:'เขียนโปรแกรม',video:'ตัดต่อวิดีโอและสร้างคอนเทนต์',graphic3d:'งานกราฟิกและ 3D',general:'ใช้งานทั่วไป'};
+const CONDTX={new:'มือหนึ่ง',used:'มือสอง',either:'ให้ระบบเลือกตามความคุ้มค่า'};
+const DEV={desktop:'🖥️ คอมตั้งโต๊ะ',laptop:'💻 โน้ตบุ๊ก'};
+
+let AC=null,TT=null,unseen=0;const baseTitle=document.title;
+function chime(){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();
+  const master=AC.createGain();master.gain.value=1;const comp=AC.createDynamicsCompressor();master.connect(comp);comp.connect(AC.destination);
+  const t0=AC.currentTime;
+  [0,.9].forEach(off=>[[880,0],[1108.7,.18],[1318.5,.36],[1760,.54]].forEach(a=>{
+    const o=AC.createOscillator(),g=AC.createGain(),t=t0+off+a[1];o.type='square';o.frequency.value=a[0];
+    g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(.9,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.34);
+    o.connect(g);g.connect(master);o.start(t);o.stop(t+.36)}))}catch(e){}}
+let THV=null;
+function pickVoice(){try{THV=(speechSynthesis.getVoices()||[]).find(v=>/^th/i.test(v.lang))||null}catch(e){THV=null}return THV}
+try{if(window.speechSynthesis){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}}catch(e){}
+function speak(m){try{if(!window.speechSynthesis)return;speechSynthesis.cancel();pickVoice();
+  [1,2].forEach(()=>{const u=new SpeechSynthesisUtterance(m);u.lang='th-TH';u.volume=1;u.rate=.95;u.pitch=1;if(THV)u.voice=THV;speechSynthesis.speak(u)})}catch(e){}}
+function buzz(){try{if(navigator.vibrate)navigator.vibrate([400,200,400,200,400])}catch(e){}}
+/* ปลดล็อกเสียงด้วยการแตะครั้งแรก (เบราว์เซอร์บังคับให้มีการแตะก่อนถึงจะเล่นเสียงได้) */
+function unlockAudio(){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();
+  if(window.speechSynthesis){const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}}catch(e){}}
+document.addEventListener('click',unlockAudio);document.addEventListener('touchstart',unlockAudio,{passive:true});
+function toast(ic,tx){$('toastIc').textContent=ic;$('toastTx').textContent=tx;$('toast').classList.add('show');clearTimeout(TT);TT=setTimeout(()=>$('toast').classList.remove('show'),9000)}
+function notifyNew(x){
+  const rev=x.rev>0;
+  const msg=(rev?'แก้ไขสเปก: ':'จัดสเปกเสร็จ: ')+x.name+' ('+x.lv+' ปี '+x.yr+' '+x.dept+') · '+baht(x.total);
+  toast(rev?'✏️':'🔔',msg);
+  if($('soundToggle').checked){chime();buzz();setTimeout(()=>speak((rev?'มีการแก้ไขสเปก ':'มีลูกค้าจัดสเปกเสร็จ ')+x.name+' งบ '+Math.round(x.total)+' บาท'),1900)}
+  if(document.hidden){unseen++;document.title='('+unseen+') '+baseTitle}
+  try{if('Notification' in window&&Notification.permission==='granted')new Notification(rev?'แก้ไขสเปก':'มีคนจัดสเปกเสร็จ',{body:msg,requireInteraction:true,vibrate:[400,200,400]})}catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){unseen=0;document.title=baseTitle}});
+$('notifBtn').addEventListener('click',async()=>{
+  if(!('Notification' in window)){toast('⚠️','เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือน');return}
+  const p=await Notification.requestPermission();toast(p==='granted'?'✅':'⚠️',p==='granted'?'เปิดแจ้งเตือนบนเบราว์เซอร์แล้ว':'ยังไม่ได้อนุญาตการแจ้งเตือน')});
+$('testBtn').addEventListener('click',()=>{unlockAudio();chime();buzz();setTimeout(()=>speak('ทดสอบเสียง มีลูกค้าจัดสเปกเสร็จ'),1900);
+  pickVoice();toast('🔊',THV?'ทดสอบเสียงแล้ว (พบเสียงภาษาไทย: '+THV.name+')':'ทดสอบเสียงแล้ว แต่ไม่พบเสียงพูดภาษาไทยในเครื่อง ถ้าไม่มีเสียงอ่าน ดูวิธีติดตั้งเสียงไทยที่ผมแนะนำ')});
+$('themeButton').addEventListener('click',()=>document.body.classList.toggle('light'));
+
+if(!firebaseConfig||!firebaseConfig.projectId||/ใส่/.test(firebaseConfig.projectId)){
+  $('loginMsg').textContent='ยังไม่ได้ตั้งค่า firebase-config.js';
+  $('inBtn').disabled=true;
+}else{
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+let DOCS=[],ready=false,unsub=null,unsubB=null,BLK=new Map(),STATS=new Map(),freshIds=new Set();const NOTI=new Map(),DN=new Map();
+
+function login(){
+  $('loginMsg').textContent='';
+  signInWithEmailAndPassword(auth,$('em').value.trim(),$('pw').value).then(()=>{$('pw').value=''}).catch(e=>{
+    $('pw').value='';
+    $('loginMsg').textContent=/too-many/.test(e.code)?'ใส่ผิดหลายครั้ง กรุณารอสักครู่แล้วลองใหม่':'อีเมลหรือรหัสผ่านไม่ถูกต้อง'});
+}
+$('inBtn').addEventListener('click',login);
+$('pw').addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+$('em').addEventListener('keydown',e=>{if(e.key==='Enter')$('pw').focus()});
+$('outBtn').addEventListener('click',()=>signOut(auth));
+
+onAuthStateChanged(auth,u=>{
+  if(unsub){unsub();unsub=null}
+  if(unsubB){unsubB();unsubB=null}
+  ready=false;DOCS=[];BLK=new Map();
+  $('loginBox').classList.toggle('hidden',!!u);
+  $('dash').classList.toggle('hidden',!u);
+  $('hdrTools').classList.toggle('hidden',!u);
+  if(!u)return;
+  unsubB=onSnapshot(collection(db,'blocked'),s=>{BLK=new Map(s.docs.map(d=>[d.id,d.data()]));render()},()=>{});
+  const q=query(collection(db,'builds'),orderBy('ts','desc'),limit(300));
+  unsub=onSnapshot(q,snap=>{
+    const first=!ready;
+    snap.docChanges().forEach(c=>{if(c.type==='added'&&!first){const d=c.doc.data(),sg=sigOf(d),now=Date.now();freshIds.add(c.doc.id);
+      if(d.did){const ar=(DN.get(d.did)||[]).filter(t=>now-t<60000);ar.push(now);DN.set(d.did,ar);
+        if(ar.length>3){if(ar.length===4)toast('⚠️','เครื่อง '+(d.dev||String(d.did).slice(0,8))+' ส่งถี่ผิดปกติ ปิดเสียงแจ้งเตือนของเครื่องนี้ชั่วคราว (ดูปุ่มบล็อกด้านล่าง)');return}}
+      if(!(d.rev>0)&&NOTI.has(sg)&&now-NOTI.get(sg)<300000)return; /* ข้อมูลเหมือนเดิมภายใน 5 นาที ไม่เด้งซ้ำ */
+      if(!(d.rev>0))NOTI.set(sg,now);notifyNew(d)}});
+    ready=true;
+    DOCS=snap.docs.map(d=>Object.assign({_id:d.id},d.data(),{_t:d.data().ts&&d.data().ts.toMillis?d.data().ts.toMillis():Date.now()}));
+    $('live').textContent='🟢 เชื่อมต่อแล้ว · อัปเดตอัตโนมัติ (เปิดหน้านี้ค้างไว้เพื่อรับแจ้งเตือน)';
+    render();
+  },err=>{
+    $('live').textContent='🔴 อ่านข้อมูลไม่ได้';
+    toast('⚠️','อ่านข้อมูลไม่ได้ — ตรวจว่าอีเมลนี้ตรงกับที่ตั้งไว้ใน firestore.rules');
+  });
+});
+
+const sigOf=d=>[d.name,d.lv,d.yr,d.dept,d.device,d.budget,d.pur,d.cond].join('|');
+/* รวมรายการ rid เดียวกัน และรายการที่ข้อมูลเหมือนกันภายใน 5 นาที (กันกดรัว) เหลือฉบับล่าสุด */
+function grouped(){
+  const gs=[];
+  DOCS.slice().sort((a,b)=>a._t-b._t).forEach(d=>{
+    const s=sigOf(d);
+    let g=gs.find(x=>x.rid===d.rid)||gs.find(x=>x.sig===s&&Math.abs(d._t-x.latest._t)<300000);
+    if(!g){gs.push({rid:d.rid,sig:s,latest:d,ids:[d._id],n:1})}
+    else{g.ids.push(d._id);g.n++;if(d._t>=g.latest._t)g.latest=d}
+  });
+  return gs.sort((a,b)=>b.latest._t-a.latest._t);
+}
+function devStats(){
+  const m=new Map();
+  DOCS.forEach(d=>{if(!d.did)return;let e=m.get(d.did);if(!e){e={did:d.did,dev:d.dev||'',name:d.name,last:0,times:[]};m.set(d.did,e)}
+    e.times.push(d._t);if(d._t>=e.last){e.last=d._t;e.name=d.name;e.dev=d.dev||e.dev}});
+  m.forEach(e=>{e.times.sort((x,y)=>x-y);e.spam=false;for(let i=4;i<e.times.length;i++){if(e.times[i]-e.times[i-4]<600000){e.spam=true;break}}});
+  return m;
+}
+function devLine(x){
+  if(!x.dev&&!x.did)return'';
+  const st=STATS.get(x.did);
+  return '<p class="muted">📱 '+esc(x.dev||'ไม่ทราบรุ่น')+(x.did?' · 🆔 '+esc(String(x.did).slice(0,8)):'')+(st&&st.times.length>1?' · ส่งมา '+st.times.length+' รายการ':'')+(st&&st.spam?' · <b style="color:#f87171">⚠️ ส่งถี่ผิดปกติ</b>':'')+'</p>';
+}
+function renderSide(){
+  STATS=devStats();
+  const sp=[...STATS.values()].filter(e=>e.spam&&!BLK.has(e.did));
+  let h='';
+  if(sp.length)h+='<div class="panel"><h3>⚠️ ตรวจพบเครื่องที่ส่งถี่ผิดปกติ</h3><p class="muted">ส่งตั้งแต่ 5 รายการขึ้นไปภายใน 10 นาที</p>'+sp.map(e=>'<div class="rec"><strong>📱 '+esc(e.dev||'ไม่ทราบรุ่น')+'</strong><p class="muted">🆔 '+esc(e.did.slice(0,8))+' · ส่งมา '+e.times.length+' รายการ · ชื่อล่าสุดที่กรอก: '+esc(e.name)+'</p><div class="actions"><button data-block="'+esc(e.did)+'">🚫 บล็อก</button><button class="danger" data-blockwipe="'+esc(e.did)+'">🚫 บล็อกและลบข้อมูลของเครื่องนี้</button></div></div>').join('')+'</div>';
+  if(BLK.size)h+='<div class="panel"><h3>🚫 เครื่องที่บล็อกไว้ ('+BLK.size+')</h3>'+[...BLK].map(([id,b])=>'<div class="rec"><strong>📱 '+esc(b.dev||'ไม่ทราบรุ่น')+'</strong><p class="muted">🆔 '+esc(id.slice(0,8))+(b.name?' · ชื่อที่เคยกรอก: '+esc(b.name):'')+'</p><div class="actions"><button data-unblock="'+esc(id)+'">ปลดบล็อก</button></div></div>').join('')+'</div>';
+  $('sideBox').innerHTML=h;
+}
+$('dash').addEventListener('click',async e=>{
+  const t=e.target.closest&&e.target.closest('button');if(!t)return;
+  const b=t.dataset.block,w=t.dataset.blockwipe,u=t.dataset.unblock;
+  if(!(b||w||u))return;
+  try{
+    if(b||w){
+      const did=b||w,s=STATS.get(did)||{};
+      if(!confirm((w?'บล็อกเครื่องนี้และลบข้อมูลทั้งหมดของเครื่องนี้?':'บล็อกเครื่องนี้?')+'\nเครื่อง: '+(s.dev||did.slice(0,8))))return;
+      await setDoc(doc(db,'blocked',did),{dev:s.dev||'',name:s.name||'',at:serverTimestamp()});
+      if(w){for(;;){const q=await getDocs(query(collection(db,'builds'),where('did','==',did),limit(400)));if(q.empty)break;const bt=writeBatch(db);q.docs.forEach(d=>bt.delete(d.ref));await bt.commit()}}
+      toast('🚫','บล็อกเครื่องนี้แล้ว เครื่องนี้ส่งข้อมูลเข้ามาอีกไม่ได้');
+    }else{await deleteDoc(doc(db,'blocked',u));toast('✅','ปลดบล็อกแล้ว')}
+  }catch(err){toast('⚠️','ทำรายการไม่สำเร็จ ตรวจว่าวางกฎ firestore.rules ตัวใหม่ใน Firebase แล้ว')}
+});
+function card(g){
+  const x=g.latest,fresh=g.ids.some(i=>freshIds.has(i));
+  return '<div class="rec'+(fresh?' fresh':'')+'"><div class="rec-h"><div><strong>'+esc(x.name)+'</strong>'+(fresh?'<span class="badge-new">ใหม่</span>':'')
+  +'<div class="chips-sum"><span class="chip">🎓 '+esc(x.lv)+' ปีที่ '+esc(x.yr)+'</span><span class="chip">🏫 '+esc(x.dept)+'</span><span class="chip">🕒 '+esc(new Date(x._t).toLocaleString('th-TH',{dateStyle:'medium',timeStyle:'short'}))+'</span>'+(g.n>1?'<span class="chip">✏️ แก้ไข '+(g.n-1)+' ครั้ง</span>':'')+'</div></div><div class="price">'+baht(x.total)+'</div></div>'
+  +'<p class="muted">'+(DEV[x.device]||'')+' · งบ '+baht(x.budget)+' · '+esc(PUR[x.pur]||x.pur)+(x.device==='desktop'?' · '+esc(CONDTX[x.cond]||''):'')+'</p>'
+  +'<details'+(fresh?' open':'')+'><summary>ดูรายการที่จัดให้</summary><ul>'+(x.items||[]).map(i=>'<li>'+esc(i.l)+': '+esc(i.n)+(i.u?' [มือสอง]':'')+' — '+baht(i.p)+'</li>').join('')+'</ul>'+(x.cool?'<p>❄️ ระบายความร้อน: ต้องใช้ '+esc(x.cool)+'</p>':'')+'</details>'
+  +devLine(x)+'<div class="actions"><button class="danger" data-del="'+esc(g.ids.join(','))+'">🗑️ ลบ</button>'+(x.did&&!BLK.has(x.did)?'<button data-block="'+esc(x.did)+'">🚫 บล็อกเครื่องนี้</button>':'')+(x.did&&BLK.has(x.did)?'<span class="chip">🚫 บล็อกแล้ว</span>':'')+'</div></div>';
+}
+function render(){renderSide();
+  const q=$('rQ').value.trim().toLowerCase(),lv=$('rLv').value;
+  const all=grouped(),r=all.filter(g=>{const x=g.latest;return(!q||(x.name+' '+x.dept).toLowerCase().includes(q))&&(lv==='all'||x.lv+'-'+x.yr===lv)});
+  $('cnt').textContent='('+all.length+' รายการ)';
+  $('recList').innerHTML=r.length?r.map(card).join(''):'<div class="panel muted">ยังไม่มีรายการที่ตรงเงื่อนไข</div>';
+}
+$('rQ').addEventListener('input',render);$('rLv').addEventListener('change',render);
+$('recList').addEventListener('click',async e=>{
+  const ids=e.target.dataset.del;if(!ids||!confirm('ลบรายการนี้?'))return;
+  try{for(const id of ids.split(','))await deleteDoc(doc(db,'builds',id))}catch(err){toast('⚠️','ลบไม่สำเร็จ')}
+});
+$('clrBtn').addEventListener('click',async()=>{
+  if(!DOCS.length||!confirm('ลบทั้งหมด '+DOCS.length+' รายการ? ย้อนกลับไม่ได้'))return;
+  try{for(;;){const s=await getDocs(query(collection(db,'builds'),limit(400)));if(s.empty)break;const b=writeBatch(db);s.docs.forEach(d=>b.delete(d.ref));await b.commit()}}catch(err){toast('⚠️','ลบไม่สำเร็จ')}
+});
+$('csvBtn').addEventListener('click',()=>{
+  const c=v=>{let s=String(v==null?'':v);if(/^[=+\-@\t\r]/.test(s))s="'"+s;return'"'+s.replace(/"/g,'""')+'"'};
+  const head=['วันที่','ชื่อ','ระดับ','ชั้นปี','แผนก','ประเภท','วัตถุประสงค์','สภาพ','งบ','ราคารวม','ชุดระบายความร้อน','รายการ'];
+  const rows=grouped().map(g=>g.latest).map(x=>[new Date(x._t).toLocaleString('th-TH'),x.name,x.lv,x.yr,x.dept,x.device==='laptop'?'โน้ตบุ๊ก':'คอมตั้งโต๊ะ',PUR[x.pur]||x.pur,x.device==='desktop'?CONDTX[x.cond]:'',x.budget,x.total,x.cool,(x.items||[]).map(i=>i.l+': '+i.n+' '+i.p).join(' | ')]);
+  const csv='\ufeff'+[head].concat(rows).map(r=>r.map(c).join(',')).join('\r\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='pc-builder-records.csv';document.body.appendChild(a);a.click();a.remove();
+});
+}
+</script>
+<script>
+setTimeout(function(){
+  if(window.__PCB_ADMIN_OK)return;
+  var m=document.getElementById('loginMsg'),b=document.getElementById('inBtn');
+  if(m){m.style.color='#ff8a8a';m.textContent='ระบบยังไม่ทำงาน: โหลดไฟล์ firebase-config.js ไม่สำเร็จ ตรวจว่าอัปโหลดไฟล์นี้ไว้โฟลเดอร์เดียวกับ admin.html แล้ว และเปิดจากลิงก์ https://'}
+  if(b)b.disabled=true;
+},3500);
+</script>
+</body>
+</html>
