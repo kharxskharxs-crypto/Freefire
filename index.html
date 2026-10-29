@@ -387,24 +387,15 @@ function announce(ic,visible,spoken){toast(ic,visible);if(!soundOn())return;chim
 const ageDays=d=>d?Math.max(0,Math.floor((Date.now()-new Date(d).getTime())/86400000)):null;
 const uncOf=x=>{if(!x.src)return .12;const a=ageDays(x.src.d);if(a===null)return .10;return a>60?.08:a>30?.05:.03};
 const priceRange=parts=>{let lo=0,hi=0;KEYS.filter(k=>parts[k]).forEach(k=>{const p=parts[k].price,u=uncOf(parts[k]);lo+=p*(1-u);hi+=p*(1+u)});return[Math.round(lo/100)*100,Math.round(hi/100)*100]};
-/* ลิงก์ไปหน้าสินค้าที่ร้านโดยตรง: ถ้ามีลิงก์หน้าสินค้าจริงใน EXTRA_LINKS จะเปิดตรง ถ้าไม่มีจะเปิดผลค้นหาของร้านนั้นให้อัตโนมัติ (ไม่ต้องพิมพ์ค้นเอง)
-   เพิ่มลิงก์หน้าสินค้าจริงได้ที่ EXTRA_LINKS รูปแบบ: 'ชื่อสินค้าตรงกับใน DB':[{shop:'Advice',url:'https://...'}] */
+/* ลิงก์หน้าสินค้าจริงของบางรุ่น รูปแบบ: 'ชื่อสินค้าตรงกับใน DB':[{shop:'JIB',url:'https://...'}] */
 const EXTRA_LINKS={
   'AMD Ryzen 5 5600':[{shop:'JIB',url:J+'52538'}],
   'AMD Ryzen 5 7500F':[{shop:'JIB',url:J+'69543'}]
 };
-const SEARCH_STORES=[['Advice','advice.co.th'],['JIB','jib.co.th']];
-const cleanName=n=>String(n).replace(/\([^)]*\)/g,' ').replace(/\s+/g,' ').trim();
-const storeSearch=(q,site)=>'https://www.google.com/search?q='+encodeURIComponent('site:'+site+' '+q);
 const aTag=(u,t)=>'<a href="'+esc(u)+'" target="_blank" rel="noopener">'+esc(t)+'</a>';
-const shopLinks=x=>{
-  const ex=(EXTRA_LINKS[x.name]||[]),have=new Set(ex.map(l=>l.shop));
-  const direct=ex.map(l=>aTag(l.url,'เปิดหน้าสินค้าที่ '+l.shop));
-  const q=cleanName(x.name);
-  const search=SEARCH_STORES.filter(s=>!have.has(s[0])).map(s=>aTag(storeSearch(q,s[1]),s[0]));
-  return direct.concat(search.length?['ดูสินค้านี้ที่ '+search.join(' / ')]:[]).join(' · ');
-};
-const srcHTML=x=>x.src?'<small class="'+((ageDays(x.src.d)===null||ageDays(x.src.d)>30)?'warning':'success')+'">ตรวจที่ '+esc(x.src.shop)+(x.src.d?' เมื่อ '+esc(x.src.d)+' ('+ageDays(x.src.d)+' วันก่อน'+(ageDays(x.src.d)>30?' · ราคาอาจเปลี่ยนแล้ว ตรวจใหม่ก่อนซื้อ':'')+')':' (ไม่มีวันที่ของราคา)')+(x.src.stock?' · '+esc(x.src.stock):'')+' · <a href="'+esc(x.src.url)+'" target="_blank" rel="noopener">เปิดหน้าสินค้า</a></small>':'<small class="warning">ราคาประมาณ ยังไม่ได้ตรวจกับร้าน'+(x.cond==='u'?'':' · '+shopLinks(x))+'</small>';
+/* ลิงก์หน้าสินค้าจริง (เฉพาะรุ่นที่มีลิงก์ตรงใน EXTRA_LINKS) ไม่มีระบบค้นหาสินค้า */
+const shopLinks=x=>(EXTRA_LINKS[x.name]||[]).map(l=>aTag(l.url,'เปิดหน้าสินค้าที่ '+l.shop)).join(' · ');
+const srcHTML=x=>x.src?'<small class="'+((ageDays(x.src.d)===null||ageDays(x.src.d)>30)?'warning':'success')+'">ตรวจที่ '+esc(x.src.shop)+(x.src.d?' เมื่อ '+esc(x.src.d)+' ('+ageDays(x.src.d)+' วันก่อน'+(ageDays(x.src.d)>30?' · ราคาอาจเปลี่ยนแล้ว ตรวจใหม่ก่อนซื้อ':'')+')':' (ไม่มีวันที่ของราคา)')+(x.src.stock?' · '+esc(x.src.stock):'')+' · <a href="'+esc(x.src.url)+'" target="_blank" rel="noopener">เปิดหน้าสินค้า</a></small>':'<small class="warning">ราคาประมาณ ยังไม่ได้ตรวจกับร้าน'+(shopLinks(x)?' · '+shopLinks(x):'')+'</small>';
 const partRow=(k,x)=>'<div class="part"><div class="pi" aria-hidden="true">'+ICN[k]+'</div><div><span class="pl">'+esc(CAT[k])+'</span><span class="pn">'+esc(x.name)+(x.cond==='u'?' <span class="warning">[มือสอง]</span>':'')+'</span>'+srcHTML(x)+(x.n?'<small>'+esc(x.n)+'</small>':'')+'</div><div class="price">'+baht(x.price)+'</div></div>';
 const ICON={ok:'✓',warn:'!',bad:'✕'};
 const chkHTML=l=>l.map(x=>'<div class="chk '+x.st+'"><b aria-hidden="true">'+ICON[x.st]+'</b><span><strong>'+esc(x.t)+':</strong> '+esc(x.m)+'</span></div>').join('');
